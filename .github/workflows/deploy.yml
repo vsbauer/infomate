@@ -37,8 +37,8 @@ jobs:
 
       - name: Setup SSH Key
         run: |
-          echo "${{ secrets.PRODUCTION_SSH_KEY }}" > "${SSH_KEY_PATH}"
-          chmod 600 "${SSH_KEY_PATH}"
+          echo "${{ secrets.PRODUCTION_SSH_KEY }}" | base64 --decode > ${{ env.SSH_KEY_PATH }}
+          chmod 600 ${{ env.SSH_KEY_PATH }}
 
       - name: Copy Project Files
         run: |
