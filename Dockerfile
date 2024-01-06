@@ -4,9 +4,6 @@ FROM python:3.8-slim
 ENV MODE=dev
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Define the requirements file to use, default to requirements.txt if not specified
-ARG requirements=requirements.txt
-
 # Install system dependencies
 RUN apt-get update && apt-get install --no-install-recommends -yq \
     gcc \
@@ -14,6 +11,7 @@ RUN apt-get update && apt-get install --no-install-recommends -yq \
     libpq-dev \
     make \
     cron \
+    python3-dev \  # Ensure Python development headers and libraries are installed
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -24,7 +22,10 @@ COPY ./requirements.txt /app/requirements.txt
 # Upgrade pip, setuptools, wheel, and install Cython before other packages
 RUN pip install --upgrade pip setuptools wheel Cython
 
-# Install Python dependencies
+# Try installing PyYAML separately to isolate issues
+RUN pip install PyYAML==5.4
+
+# Install the rest of the requirements
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Now copy the rest of the app's source code
