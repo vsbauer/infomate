@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install --no-install-recommends -yq \
     libpq-dev \
     make \
     cron \
-    python3-dev \  # Ensure Python development headers and libraries are installed
+    python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
