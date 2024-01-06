@@ -1,7 +1,7 @@
 version: "3"
 services:
   app: &app
-    image: ghcr.io/vas3k/infomate:${GITHUB_SHA:-latest}
+    image: ghcr.io/vsbauer/infomate:${GITHUB_SHA:-latest}
     command: make docker-run-app
     container_name: infomate_app
     environment:
@@ -10,8 +10,8 @@ services:
       - DEBUG=false
       - APP_HOST=https://infomate.club
       - POSTGRES_DB=infomate
-      - POSTGRES_USER=vas3k
-      - POSTGRES_PASSWORD=vas3k
+      - POSTGRES_USER=vsbauer
+      - POSTGRES_PASSWORD=vsbauer
       - POSTGRES_HOST=postgres
     env_file:
       - .env
@@ -41,11 +41,11 @@ services:
     container_name: infomate_postgres
     restart: always
     environment:
-      POSTGRES_USER: vas3k
-      POSTGRES_PASSWORD: vas3k
+      POSTGRES_USER: vsbauer
+      POSTGRES_PASSWORD: vsbauer
       POSTGRES_DB: infomate
     volumes:
-      - /home/vas3k/pgdata/infomate:/var/lib/postgresql/data:rw
+      - /home/vsbauer/pgdata/infomate:/var/lib/postgresql/data:rw
 
   migrate_and_init:
     <<: *app
