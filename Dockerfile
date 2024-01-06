@@ -1,31 +1,24 @@
-# Use a specific python base image
-FROM python:3.8-slim
+# Use a full python base image
+FROM python:3.8
 
 ENV MODE=dev
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install system dependencies
-RUN apt-get update && apt-get install --no-install-recommends -yq \
-    gcc \
-    libc-dev \
+# Install system dependencies for general Python dev and specific needs for packages with native extensions
+RUN apt-get update && apt-get install -y \
+    build-essential \
     libpq-dev \
-    make \
-    cron \
     python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copy only the necessary files for installing Python dependencies
-COPY ./requirements.txt /app/requirements.txt
-
-# Upgrade pip, setuptools, wheel, and install Cython before other packages
+# Install Python packages in a way that ensures build dependencies are present
 RUN pip install --upgrade pip setuptools wheel Cython
-
-# Try installing PyYAML separately to isolate issues
 RUN pip install PyYAML==5.4
 
-# Install the rest of the requirements
+# If PyYAML installs successfully, add the rest of the requirements
+COPY ./requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Now copy the rest of the app's source code
