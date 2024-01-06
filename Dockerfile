@@ -26,6 +26,8 @@ RUN chmod 600 /etc/crontab
 ADD . /app
 
 RUN pip install --upgrade pip setuptools wheel
+RUN pip install --upgrade pip setuptools wheel Cython
+
 RUN pip install --no-cache-dir -e . \
     && pip install --no-cache-dir -r $requirements
 
